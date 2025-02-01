@@ -165,7 +165,7 @@ Lancer le serveur Symfony sans TLS.
 symfony server:start --no-tls
 ```
 
-L'erreur peut désormais être constatée lorsqu'un commentaire est ajouté à un événement.
+L'erreur peut désormais être constatée dans la console du navigateur, lorsqu'un commentaire est ajouté à un événement.
 
 # Installation 🛠
 
@@ -181,7 +181,7 @@ Pour installer et exécuter le projet localement, vous devez disposer des élém
 Pour installer et exécuter le projet localement, suivez ces étapes :
   * Clonez le dépôt du projet sur votre machine.
 ```bash
-git clone https://github.com/Buldozer42/SF-Events.git
+git clone https://github.com/Buldozer42/sf_events.git
 ```
   * Accédez au répertoire du projet.
 
