@@ -1,0 +1,152 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container py-2">
+        <h1>Events</h1>
+        {{ form_start(form) }}
+        <div class="row justify-content-center align-items-center g-2 mb-3">
+            <div class="col-4">
+                {{ form_widget(form.search) }}
+            </div>
+            <div class="col-2">
+                <input class="btn btn-primary" type="submit" value="Search">
+            </div>
+            <div class="col"></div>
+        </div>
+        <div class="row justify-content-center align-items-center g-2 mb-3">
+            <div class="col">
+                {{ form_row(form.date) }}
+            </div>
+            <div class="col">
+                {{ form_row(form.isPrivate) }}
+            </div>
+            <div class="col">
+                {{ form_row(form.type) }}
+            </div>
+            <div class="col">
+                {{ form_row(form.price) }}
+            </div>
+        </div>
+        {{ form_end(form) }}        
+        {% set counter = 0 %}
+        <div class="row mb-3">
+        {% if events is empty %}
+            <div class="col">
+                <div class="alert alert-warning" role="alert">
+                    No events found
+                </div>
+            </div>
+        {% else %}
+            {% for event in events %}
+                <div class="col-4">
+                    <div class="card">
+                        <div class="card-header">
+                            {% include "event/badge.html.twig" %}
+                        </div>
+                        <div class="card-body">
+                            <h6 class="card-subtitle mb-2 text-body-secondary">
+                                {{ event.location }}
+                            </h6>
+                            <h3 class="card-title">{{ event.name }}</h3>
+                            <h6 class="card-subtitle mb-2 text-body-secondary">
+                                {{ event.date|date('d/m/Y -- H:i') }} | 
+                                {% if event.price == 0 %}
+                                    Free
+                                {% else %}
+                                    {{ event.price }} $
+                                {% endif %}                            
+                        </h6>
+                            <p class="card-text">
+                                {{ event.description|length > 250 ? event.description[:250] ~ '...' : event.description }}
+                            </p>
+                        </div>
+                        <div class="card-footer text-end">
+                            <!-- Modal trigger button -->
+                            <button
+                                type="button"
+                                class="btn btn-sm btn-secondary"
+                                data-bs-toggle="modal"
+                                data-bs-target="#modalId{{ event.id }}"
+                            >
+                                Show details
+                            </button>
+                            
+                            <!-- Modal Body -->
+                            <!-- if you want to close by clicking outside the modal, delete the last endpoint:data-bs-backdrop and data-bs-keyboard -->
+                            <div
+                                class="modal fade"
+                                id="modalId{{ event.id }}"
+                                tabindex="-1"
+                                data-bs-backdrop="static"
+                                data-bs-keyboard="false"
+                                
+                                role="dialog"
+                                aria-labelledby="modalTitleId{{ event.id }}"
+                                aria-hidden="true"
+                            >
+                                <div
+                                    class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-lg"
+                                    role="document"
+                                >
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="modalTitleId{{ event.id }}">
+                                                {% include "event/badge.html.twig" %}
+                                            </h5>
+                                            <button
+                                                type="button"
+                                                class="btn-close"
+                                                data-bs-dismiss="modal"
+                                                aria-label="Close"
+                                            ></button>
+                                        </div>
+                                        <div class="modal-body text-start">
+                                            <h6 class="card-subtitle mb-2 text-body-secondary">
+                                                {{ event.location }}
+                                            </h6>
+                                            <h3 class="card-title">{{ event.name }}</h3>
+                                            <h6 class="card-subtitle mb-2 text-body-secondary">
+                                                {{ event.date|date('d/m/Y -- H:i') }} | 
+                                                {% if event.price == 0 %}
+                                                    Free
+                                                {% else %}
+                                                    {{ event.price }} $
+                                                {% endif %}                            
+                                            </h6>
+                                            <p class="card-text">
+                                                {{ event.description }}
+                                            </p>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button
+                                                type="button"
+                                                class="btn btn-secondary"
+                                                data-bs-dismiss="modal"
+                                            >
+                                                Close
+                                            </button>
+                                            {% if user is not null and user == event.owner or user in event.guests %}
+                                                <a class="btn btn-primary" href={{ path('app_event', {'id': event.id}) }}>
+                                                    Event page
+                                                </a>
+                                            {% else %}
+                                                <a class="btn btn-primary" href={{ path('app_event_participate', {'id': event.id}) }}>
+                                                    Participate
+                                                </a>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>                        
+                        </div>
+                    </div>
+                </div>
+                {% set counter = counter + 1 %}
+                {% if counter % 3 == 0 %}
+                    </div><div class="row mb-3">
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+        </div>
+    </div>
+{% endblock %}

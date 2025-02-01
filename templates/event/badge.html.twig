@@ -1,0 +1,35 @@
+<span class="badge bg-secondary">{{ event.type }}</span>
+<span class="badge bg-secondary">
+    {{ event.guests|length }} /
+    {{ event.maxGuests }}
+    <i class="bi bi-people-fill"></i>
+</span>
+{% if event.private %}
+    <span class="badge bg-danger">
+        <i class="bi bi-lock-fill"></i>
+        Private
+    </span>
+{% else %}
+    <span class="badge bg-light text-dark">
+        <i class="bi bi-globe"></i>
+        Public
+    </span>
+{% endif %}
+{% if user is not null %}
+    {% if  user in event.guests  %}
+        <span class="badge bg-success">
+            <i class="bi bi-check2-circle"></i>
+            You're in !
+        </span>
+    {% elseif user == event.owner %}
+        <span class="badge bg-primary">
+            <i class="bi bi-patch-check"></i>
+            It's yours !
+        </span>
+    {% elseif event.getPendingDemandForUser(user) %}
+        <span class="badge bg-info">
+            <i class="bi bi-clock"></i>
+            Pending
+        </span>
+    {% endif %}
+{% endif %}

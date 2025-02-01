@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container mt-2">
+        <h1 class="text-center"> Types list </h1>
+        <p> Be careful when deleting a type, it will also delete all the products associated with it. </p>
+        <div class="table-responsive">
+        <table class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">
+                        <span>Action</span>
+                        <a href="{{ path('app_admin_type_add') }}" class="btn btn-sm btn-primary">Add</a>
+                    </th>
+                </tr>
+            </thead>
+                <tbody>
+                    {% for type in types %}
+                        <tr>
+                            <td>{{ type.name }}</td>
+                            <td>
+                                <a href="{{ path('app_admin_type_modify', {'id': type.id}) }}" class="btn btn-sm btn-success">
+                                    Modify
+                                </a>
+                                <a href={{ path('app_admin_type_delete', {'id': type.id}) }} class="btn btn-sm btn-danger">
+                                    Delete
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+       </div>
+    </div>
+{% endblock %}

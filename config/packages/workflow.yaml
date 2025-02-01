@@ -1,0 +1,27 @@
+framework:
+    workflows:
+        demand_resolving:
+            type: 'state_machine'
+            audit_trail:
+                enabled: true
+            marking_store:
+                type: 'method'
+                property: 'currentState'
+            supports:
+                - App\Entity\Demand
+            initial_marking: pending
+            places:
+                - pending
+                - accepted
+                - rejected
+                - canceled
+            transitions:
+                to_accept:
+                    from: pending
+                    to:   accepted
+                to_reject:
+                    from: pending
+                    to:   rejected
+                to_cancel:
+                    from: pending
+                    to:   canceled

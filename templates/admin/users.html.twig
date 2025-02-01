@@ -1,0 +1,141 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+    <div class="container mt-2">
+        <h1 class="text-center"> Users list </h1>
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th scope="col">Name</th>
+                        <th scope="col">
+                            <span>Action</span>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in users %}
+                        <tr>
+                            <td>{{ user }}</td>
+                            <td>
+                                <!-- Modal trigger button -->
+                                <button
+                                    type="button"
+                                    class="btn btn-sm btn-secondary"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#modalId{{ user.id }}"
+                                >
+                                    Show
+                                </button>
+                                
+                                <!-- Modal Body -->
+                                <div
+                                    class="modal fade"
+                                    id="modalId{{ user.id }}"
+                                    tabindex="-1"
+                                    data-bs-backdrop="static"
+                                    data-bs-keyboard="false"
+                                    
+                                    role="dialog"
+                                    aria-labelledby="modalTitleId{{ user.id }}"
+                                    aria-hidden="true"
+                                >
+                                    <div
+                                        class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-lg"
+                                        role="document"
+                                    >
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="modalTitleId{{ user.id }}">
+                                                    {{ user }}
+                                                </h5>
+                                                <button
+                                                    type="button"
+                                                    class="btn-close"
+                                                    data-bs-dismiss="modal"
+                                                    aria-label="Close"
+                                                ></button>
+                                            </div>
+                                            <div class="modal-body text-start">
+                                                <h5>Summary</h5>
+                                                <table class="table table-hover table-bordered">
+                                                    <tbody>
+                                                        <tr>
+                                                            <th scope="row">Email</th>
+                                                            <td>{{ user.email }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th scope="row">Roles</th>
+                                                            <td>
+                                                                {% for role in user.roles %}
+                                                                    {{ role }}
+                                                                {% endfor %}
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th scope="row">Attending events</th>
+                                                            <td>{{user.getAttendingEvents()|length}}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th scope="row">Owned events</th>
+                                                            <td>{{user.getOwnedEvents()|length}}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th scope="row">Pending demands</th>
+                                                            <td>{{user.getPendingDemands()|length}}</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                                <h5>Events</h5>
+                                                <table class="table table-hover table-bordered">
+                                                    <thead>
+                                                        <tr>
+                                                            <th scope="col">Name</th>
+                                                            <th scope="col">Type</th>
+                                                            <th scope="col">Date</th>
+                                                            <th scope="col">Owner</th>
+                                                            <th scope="col">State</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {% for event in user.events %}
+                                                            <tr>
+                                                                <td>{{ event.name }}</td>
+                                                                <td>{{ event.type }}</td>
+                                                                <td>{{ event.date|date('Y-m-d H:i') }}</td>
+                                                                <td>{{ event.owner }}</td>
+                                                                <td>
+                                                                    {% if event.owner == user %}
+                                                                        Owner
+                                                                    {% elseif event in user.getAttendingEvents() %}
+                                                                        Attending
+                                                                    {% elseif event in user.getPendingEvents() %}
+                                                                        Pending
+                                                                    {% endif %}
+                                                                </td>
+                                                            </tr>
+                                                        {% endfor %}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button
+                                                    type="button"
+                                                    class="btn btn-secondary"
+                                                    data-bs-dismiss="modal"
+                                                >
+                                                    Close
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <a href={{ path('app_admin_user_delete', {'id': user.id}) }} class="btn btn-sm btn-danger">Delete</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+       </div>
+    </div>
+{% endblock %}

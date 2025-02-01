@@ -20,5 +20,14 @@ services:
             - '../src/Entity/'
             - '../src/Kernel.php'
 
+    App\Validator\AddressValidator:
+        arguments:
+            $client: '@http_client'
+        tags: ['validator.constraint_validator']
+    
+    App\Controller\EventController:
+        arguments:
+            $demandResolving: '@state_machine.demand_resolving'
+
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones

@@ -1,0 +1,65 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<div class="container">
+    <div
+        class="row justify-content-center align-items-center g-2 mb-3"
+    >
+        <div class="col border-end text-end">
+            <h2>{{ user}}</h2>
+            <h3 class="text-secondary">{{ user.email }}</h3>
+            <a href={{ path('app_logout') }} class="text-danger">
+                <h4>Logout</h4>
+            </a>
+        </div>
+        <div class="col ms-3">
+            <h3>{{ sortedEvents|length }} events</h3>
+            <ul>
+                <li><h4>{{ user.attendingEvents|length }} attending events</h4></li>
+                <li><h4>{{ user.ownedEvents|length }} owned events</h4></li>
+            </ul>
+        </div>
+    </div>
+    <div>
+        <h2>Notifications</h2>
+        <div>
+            {% if user.notifications is empty %}
+                <p>You have no notifications.</p>
+            {% endif %}
+            {% for notification in user.notifications %}
+                <div class="alert alert-info fade show d-flex justify-content-between" role="alert">
+                    <span>{{ notification.content }}</span>
+                    <a href={{ path('app_notification_delete', {'id': notification.id}) }} type="button" class="btn-close"  aria-label="Close"></a>
+                </div>
+            {% endfor %}
+        </div>       
+    </div>
+    <div>
+        <h2>Invitations</h2>
+        <div class="list-group">
+            {% if invitedEvents is empty %}
+                <p>You have no invitations.</p>
+            {% endif %}
+            {% for event in invitedEvents %}
+                <li class="list-group-item d-flex justify-content-between">
+                    <span>{{ event.name }}</span>
+                    <div>
+                        <a href={{ path('app_event_invite_accept', {'event': event.id}) }} class="btn btn-success">Accept</a>
+                        <a href={{ path('app_event_invite_cancel', {'event': event.id}) }} class="btn btn-danger">Cancel</a>
+                    </div>
+            {% endfor %}
+        </div>       
+    </div>
+    <div>
+        <h2>Events</h2>
+        <div class="list-group">
+            {% for event in sortedEvents %}
+                <a href={{ path('app_event', {'id': event.id}) }} class="list-group-item list-group-item-action">
+                    <span>{{ event.name }}</span>
+                    <span class="text-secondary">- {{ event.date|date('d/m/Y -- H:i') }}</span>
+                </a>
+            {% endfor %}
+        </div>       
+    </div>
+</div>
+{% endblock %}

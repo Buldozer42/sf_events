@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+    <div class="container my-3">
+        <div class="row justify-content-center align-items-center g-2">
+            <div class="col"></div>
+            <div class="col-6">
+                <h1 class="text-center">Add a type</h1>
+                {{ form_start(form) }}
+                    <div class="mb-3">
+                        {{ form_row(form.name) }}
+                    </div>
+                {{ form_rest(form) }}
+                    <div class="text-end">
+                        <input class="btn btn-success" type="submit" value="Submit">
+                        <a href="{{ path('app_admin_types')}}" class="btn btn-secondary">Cancel</a>
+                    </div>
+                {{ form_end(form) }}
+            </div>
+            <div class="col"></div>
+        </div>
+    </div>
+{% endblock %}

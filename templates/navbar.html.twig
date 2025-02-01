@@ -1,0 +1,68 @@
+{% block body %}
+<nav
+    class="navbar navbar-expand-sm"
+>
+    <div class="container">
+        <a class="navbar-brand" href={{ path('app_home') }}>SF Event</a>
+        <button
+            class="navbar-toggler d-lg-none"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#collapsibleNavId"
+            aria-controls="collapsibleNavId"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+        >
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="collapsibleNavId">
+            <ul class="navbar-nav me-auto mt-2 mt-lg-0">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" id="navDropdownId" href="#" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Event
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navDropdownId" >
+                        <a class="dropdown-item" href={{ path('app_events') }}>List</a>
+                        <a class="dropdown-item" href={{ path('app_event_register') }}>Register</a>
+                    </div>
+                </li>
+                {% if app.user %}
+                    {% if 'ROLE_ADMIN' in app.user.roles %}
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" id="navDropdownId" href="#" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Admin
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navDropdownId" >
+                                <a class="dropdown-item" href={{ path('app_admin_events') }}>Event</a>
+                                <a class="dropdown-item" href={{ path('app_admin_types') }}>Type</a>
+                                <a class="dropdown-item" href={{ path('app_admin_users') }}>User</a>
+                            </div>
+                        </li>
+                    {% endif %}
+                {% endif %}
+            </ul>
+        </div>
+        <a 
+            role="button"
+            class="btn btn-sm btn-dark position-relative"
+            {% if app.user %}
+                href={{ path('app_user') }}
+            {% else %}
+                href={{ path('app_login') }}
+            {% endif %}
+        >
+            <i class="bi bi-person-circle fs-4"></i>
+            {% if app.user %}
+                {% set nbNotifications = app.user.notifications|length %}
+                {% if nbNotifications > 0 %}
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                        {{ nbNotifications }}
+                        <span class="visually-hidden">unread messages</span>
+                    </span>
+                {% endif %}
+            {% endif %}
+        </a>
+    </div>
+</nav>
+
+{% endblock %}
